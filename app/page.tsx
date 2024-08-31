@@ -3,31 +3,46 @@ import { useEffect, useState } from "react";
 import Scoreboard from "@/components/Scoreboard";
 import Game from "@/components/Game";
 import TaskInput from "@/components/TaskInput";
+import { Glicko2, Player } from "glicko2";
 
 export default function Home() {
-  const [tasks, setTasks] = useState<string[]>([""]); // State to manage task inputs
-  const [scores, setScores] = useState<number[]>([]); // State to manage task scores
-  const [inGame, setInGame] = useState<boolean>(false); // State to manage if game is started
-  const [taskPair, setTaskPair] = useState<number[]>([0, 1]); // State to manage current task pair
+  const [ranking] = useState(
+    new Glicko2({
+      tau: 0.5,
+      rating: 1500,
+      rd: 200,
+      vol: 0.06,
+    })
+  );
+  const [tasks, setTasks] = useState<string[]>([""]);
+  const [players, setPlayers] = useState<any[]>([]);
+  const [inGame, setInGame] = useState<boolean>(false);
+  const [taskPair, setTaskPair] = useState<number[]>([0, 1]);
+  const [matches, setMatches] = useState<any[]>([]);
 
   useEffect(() => {
+    const initialPlayer = ranking.makePlayer(1500, 200, 0.06);
     setTasks([""]);
-    setScores([0]);
-  }, []);
+    setPlayers([initialPlayer]);
+  }, [ranking]);
 
   const addTask = () => {
-    setTasks([...tasks, ""]);
-    setScores([...scores, 0]); // Initialize score for the new task
+    const newTask = "";
+    const newPlayer = ranking.makePlayer(1500, 200, 0.06);
+
+    setTasks([...tasks, newTask]);
+    setPlayers([...players, newPlayer]);
   };
 
   const deleteTask = (index: number) => {
     const newTasks = [...tasks];
-    newTasks.splice(index, 1);
-    setTasks(newTasks);
+    const newPlayers = [...players];
 
-    const newScores = [...scores];
-    newScores.splice(index, 1);
-    setScores(newScores);
+    newTasks.splice(index, 1);
+    newPlayers.splice(index, 1);
+
+    setTasks(newTasks);
+    setPlayers(newPlayers);
   };
 
   const handleInputChange = (
@@ -58,10 +73,11 @@ export default function Home() {
     return [first, second];
   };
 
-  const handleTaskClick = (winner: number) => {
-    const newScores = [...scores];
-    newScores[winner] += 1;
-    setScores(newScores);
+  const handleTaskClick = (winner: number, loser: number) => {
+    const newMatch = [players[winner], players[loser], 1]; // Winner wins
+    setMatches([...matches, newMatch]);
+    console.log(matches);
+    ranking.updateRatings([...matches, newMatch]);
     setTaskPair(generateRandomPair(tasks.length));
   };
 
@@ -85,7 +101,11 @@ export default function Home() {
             handleInputChange={handleInputChange}
           />
         )}
-        <Scoreboard tasks={tasks} scores={scores} />
+        <Scoreboard
+          tasks={tasks}
+          scores={players.map((player) => player.getRating())}
+          matches={matches}
+        />
       </div>
     </main>
   );

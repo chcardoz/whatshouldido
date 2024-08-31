@@ -17,6 +17,9 @@ importers:
       framer-motion:
         specifier: ^11.3.31
         version: 11.3.31(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      glicko2:
+        specifier: ^1.2.1
+        version: 1.2.1
       lucide-react:
         specifier: ^0.436.0
         version: 0.436.0(react@18.3.1)
@@ -744,6 +747,9 @@ packages:
 
   get-tsconfig@4.8.0:
     resolution: {integrity: sha512-Pgba6TExTZ0FJAn1qkJAjIeKoDJ3CsI2ChuLohJnZl/tTU8MVrq3b+2t5UOPfRa4RMsorClBjJALkJUMjG1PAw==}
+
+  glicko2@1.2.1:
+    resolution: {integrity: sha512-llKC0G0hRybX9fmDnx2u2tA9TZSg0OWM2q+AKApN4ofO8QTxFVESxvkLVulpo29fBd7yOBekgey2zkFOMMo6ng==}
 
   glob-parent@5.1.2:
     resolution: {integrity: sha512-AOIgSQCepiJYwP3ARnGx+5VnTu2HBYdzbGP45eLw1vr3zB3vZLeyed1sC9hnbcOc9/SrMyM5RPQrkGz4aS9Zow==}
@@ -2448,6 +2454,8 @@ snapshots:
   get-tsconfig@4.8.0:
     dependencies:
       resolve-pkg-maps: 1.0.0
+
+  glicko2@1.2.1: {}
 
   glob-parent@5.1.2:
     dependencies:

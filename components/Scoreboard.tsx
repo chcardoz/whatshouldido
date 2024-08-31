@@ -4,15 +4,22 @@ import { motion } from "framer-motion";
 interface ScoreboardProps {
   tasks: string[];
   scores: number[];
+  matches: any[];
 }
 
-const Scoreboard: React.FC<ScoreboardProps> = ({ tasks, scores }) => {
+const Scoreboard: React.FC<ScoreboardProps> = ({ tasks, scores, matches }) => {
   const [sortedTasks, setSortedTasks] = useState<
     { task: string; score: number }[]
   >([]);
 
   useEffect(() => {
     // Combine tasks and scores into an array of objects
+    scores.map((score, index) => {
+      if (Number.isNaN(score)) {
+        scores[index] = 0;
+      }
+    });
+
     const tasksWithScores = tasks.map((task, index) => ({
       task,
       score: scores[index],
@@ -27,17 +34,26 @@ const Scoreboard: React.FC<ScoreboardProps> = ({ tasks, scores }) => {
 
   return (
     <div className="w-full bg-gray-200 p-4 rounded-lg">
-      <h3 className="text-lg font-bold">Scoreboard:</h3>
+      <h3 className="text-md">
+        Scoreboard: (Matches played:{matches?.length})
+      </h3>
       <ul className="list-disc list-inside mt-2">
         {sortedTasks.map(({ task, score }, index) => (
-          <div key={index} className="bg-gray-400 mb-2 rounded-lg">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${(score / highestScore) * 100}%` }}
-              className="bg-green-500 rounded-lg p-2"
-            >
-              <span className="text-white">{task || "(Empty Task)"}</span>
-            </motion.div>
+          <div key={index} className="flex">
+            <div className="bg-gray-400 mb-2 rounded-lg w-[75%]">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{
+                  width: `${(score / highestScore) * 100}%`,
+                }}
+                className="bg-green-400 rounded-lg p-2"
+              >
+                <span className="text-white">{task || "(Empty Task)"}</span>
+              </motion.div>
+            </div>
+            <div className="w-[25%] p-2 overflow-x-clip">
+              {Math.floor(score)}
+            </div>
           </div>
         ))}
       </ul>

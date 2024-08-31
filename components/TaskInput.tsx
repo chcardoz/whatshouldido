@@ -21,7 +21,7 @@ const TaskInput: React.FC<TaskInputProps> = ({
 }) => {
   return (
     <div className="w-full bg-gray-200 p-4 rounded-lg">
-      <h3 className="text-lg font-bold">Tasks:</h3>
+      <h3 className="text-md">Tasks:</h3>
       {tasks.map((task, index) => (
         <div
           key={index}

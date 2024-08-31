@@ -1,6 +1,6 @@
 interface GameProps {
   stopGame: () => void;
-  handleTaskClick: (winner: number) => void;
+  handleTaskClick: (winner: number, loser: number) => void;
   tasks: string[];
   taskPair: number[];
 }
@@ -13,17 +13,17 @@ const Game: React.FC<GameProps> = ({
 }) => {
   return (
     <div className="w-full bg-gray-200 p-4 rounded-lg">
-      <h3 className="text-lg font-bold">Choose a Task:</h3>
+      <h3 className="text-md">Choose a Task:</h3>
       <div className="grid grid-cols-2 gap-4">
         <button
-          onClick={() => handleTaskClick(taskPair[0])}
-          className="bg-green-500 text-white p-2 rounded"
+          onClick={() => handleTaskClick(taskPair[0], taskPair[1])}
+          className="bg-sky-100 text-black p-2 rounded-lg h-56 shadow-lg"
         >
           {tasks[taskPair[0]] || "(Empty Task)"}
         </button>
         <button
-          onClick={() => handleTaskClick(taskPair[1])}
-          className="bg-green-500 text-white p-2 rounded"
+          onClick={() => handleTaskClick(taskPair[1], taskPair[0])}
+          className="bg-sky-100 text-black p-2 rounded-lg h-56 shadow-lg"
         >
           {tasks[taskPair[1]] || "(Empty Task)"}
         </button>
